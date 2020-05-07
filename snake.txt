@@ -1,0 +1,194 @@
+#include<conio.h>
+void play(int,int);
+using namespace std;
+int w = 30, h = 30;
+int itemx,itemy,score=0,n=2,k;
+int x = w / 2;
+int y = h / 2;
+int hx[500], hy[500];
+void update(int, int);
+void val()
+{
+    srand(time(NULL));
+	itemx = rand() % w;
+	itemy = rand() % h;
+}
+bool gameover = false;
+void play(int x1 ,int y1)
+{
+	system("CLS");
+	int i, j;
+	     x = x1;
+		 y = y1;
+	if (x<0 || x>w-1 || y<0 || y>h-1)
+	{
+		gameover = true;
+	}
+	for (i = 0;i < w+2;i++)
+	{
+		cout << "#";
+		
+	}
+	cout << "\n";
+
+	for (i = 0;i < h;i++)
+	{
+		for (j = 0;j < w;j++)
+		{
+			if (j == 0)
+			{
+				cout << "#";
+			}
+
+			if (j == x && i == y)
+			{
+
+			 cout << "o";
+			
+			}
+
+			 else if (j == itemx && i == itemy)
+			{
+				cout << "*";
+			}
+		
+			 else
+			{
+				bool print = false;
+				for (k = 0;k < n;k++)
+				{
+
+					if (hx[k] == j && hy[k] == i)
+					{
+						cout << "o";
+						print = true;
+
+					}
+					
+				}
+				if (!print)
+				{
+					cout <<" ";
+				}
+				
+			}
+			
+			if (j == w - 1)
+			{
+				cout << "#";
+			}
+
+		}
+		cout << "\n";
+	}
+	for (i = 0;i < w+2;i++)
+	{
+		cout << "#";
+
+	}
+	cout << "\t\t\t\t\tScore:" << score;
+
+}
+void over()
+{
+	if (gameover)
+	{
+		char ch;
+		system("CLS");
+		cout << "\t\t\t****************************Game-Over******************************";
+		cout << "\nYour score is:" << score;
+		cout << "\nPress any key to exit.....";
+		ch = _getch();
+		if (ch)
+		{
+			exit;
+		}
+	}
+}
+
+void movement()
+{
+	
+	if (_kbhit())
+	{
+		char ch;
+		ch = _getch();
+		
+		switch (ch)
+		{
+		case 'a':
+			update(x - 1, y);
+			play(x-1,y);
+			break;
+		case 'd':
+			update(x +1, y);
+			play(x+1,y);
+			break;
+		case 'w': 
+			update(x , y-1);
+			play(x,y-1);
+			break;
+		case 's':
+			update(x, y+1);
+			play(x,y+1);
+		}
+		
+    }
+
+}
+void update(int x2,int y2)
+{
+	hx[0] = x2;
+	hy[0] = y2;
+	int px = hx[0];
+	int py = hy[0];
+	int p2x, p2y;
+	for (k = 1;k < n;k++)
+	{
+		p2x = hx[k];
+		p2y = hy[k];
+		hx[k] = px;
+		hy[k] = py;
+		px = p2x;
+		py = p2y;
+	}
+
+}
+void loop()
+{
+	while (!gameover)
+	{
+		movement();
+		if (gameover)
+		{
+			over();
+		}
+		if (x == itemx && y == itemy)
+		{
+			val();
+			score += 10;
+			n++;
+		}
+	
+	}
+}
+int main()
+{
+	int ch;
+	cout << "\t\t\t**************************Welcome to Snake game**************************";
+	cout << "\n1.Play Game";
+	cout << "\n2.Quit";
+	cout << "\nEnter your choice: ";
+		cin >> ch;
+		if (ch == 1)
+		{
+			system("CLS");
+			val();
+			loop();
+		}
+		else 
+		{
+			exit;
+		}
+		return 0;
+}
